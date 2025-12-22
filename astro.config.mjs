@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://nomudev.com',
   // Optimized for static generation by default
   build: {
     inlineStylesheets: 'auto',
