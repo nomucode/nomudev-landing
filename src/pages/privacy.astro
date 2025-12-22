@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Privacy Policy | Nomudev" description="Privacy Policy and Cookie Statement for Nomudev.">
+  <main class="container mx-auto px-6 py-24 max-w-4xl text-text-muted">
+    <div class="mb-12">
+      <h1 class="text-4xl font-bold text-text-main font-mono mb-4">Privacy Policy & Cookie Protocol</h1>
+      <p class="text-sm font-mono text-accent-blue">Last Updated: {new Date().toLocaleDateString()}</p>
+    </div>
+
+    <div class="space-y-12 prose prose-invert max-w-none">
+      
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">1. System Identity (Introduction)</h2>
+        <p>
+          Welcome to the Nomudev network. We respect your privacy and represent the "Truth" regarding how we handle your digital footprint. 
+          This Privacy Policy explains how we collect, use, and shield your information when you visit <strong>nomudev.com</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">2. Data Ingestion (Collection)</h2>
+        <p>We collect minimal data necessary to maintain system integrity and improve user experience:</p>
+        <ul class="list-disc pl-6 space-y-2 mt-4">
+          <li><strong>Usage Data:</strong> Information on how you access the site (IP address, browser type, device info).</li>
+          <li><strong>Communication Data:</strong> If you contact us via email, we store the content of your message to reply.</li>
+          <li><strong>Matrix Choice:</strong> We store a boolean value in your local storage indicating your preference for the "Red Pill" or "Blue Pill".</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">3. Usage Protocols (Purpose)</h2>
+        <p>Your data is processed for the following directives:</p>
+         <ul class="list-disc pl-6 space-y-2 mt-4">
+          <li>To provide and maintain our Service.</li>
+          <li>To monitor the usage of our Service (Analytics).</li>
+          <li>To detect, prevent and address technical issues.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">4. Cookie Matrix (Cookies)</h2>
+        <p>
+          We use "Cookies" (small data files) to track the activity on our Service.
+        </p>
+        <div class="bg-surface border border-border p-6 rounded-lg mt-4">
+            <h3 class="text-lg font-bold text-accent-green mb-2">Your Choices</h3>
+            <ul class="space-y-4">
+                <li>
+                    <span class="text-red-500 font-bold font-mono">[RED PILL]</span>: 
+                    Acceptance of all cookies, including tracking and analytics scripts to improve the platform.
+                </li>
+                <li>
+                     <span class="text-blue-500 font-bold font-mono">[BLUE PILL]</span>: 
+                     Rejection of non-essential cookies. You remain anonymous, but some advanced system features may be dormant.
+                </li>
+            </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">5. User Rights (GDPR/CCPA)</h2>
+        <p>Depending on your location, you have rights regarding your data:</p>
+        <ul class="list-disc pl-6 space-y-2 mt-4">
+          <li><strong>The Right to Access:</strong> You can request copies of your personal data.</li>
+          <li><strong>The Right to Rectification:</strong> You can request correction of inaccurate information.</li>
+          <li><strong>The Right to Erasure:</strong> You can request that we delete your data ("Blue Pill Protocol").</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-text-main mb-4 font-mono">6. Contact</h2>
+        <p>
+          If you have questions about this policy, please contact us via the main frequency:<br>
+          <a href="mailto:contact@nomudev.com" class="text-accent-blue hover:text-accent-green transition-colors font-mono mt-2 inline-block">contact@nomudev.com</a>
+        </p>
+      </section>
+
+      <div class="pt-12 border-t border-border mt-12">
+          <a href="/" class="text-accent-blue hover:text-white transition-colors font-mono text-sm">&larr; Return to Main System</a>
+      </div>
+
+    </div>
+  </main>
+</Layout>
