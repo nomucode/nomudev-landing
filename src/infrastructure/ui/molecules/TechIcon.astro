@@ -1,20 +1,8 @@
 ---
 import { 
-  Coffee, 
-  Hash, 
-  Code2, 
-  Cloud, 
-  Webhook, 
-  Container, 
-  Ship, 
-  LayoutTemplate, 
-  Hexagon, 
-  Zap, 
-  Database, 
-  Flame, 
-  BrainCircuit,
-  Terminal,
-  Server
+  Coffee, Hash, Code2, Cloud, Webhook, Container, Ship, 
+  LayoutTemplate, Hexagon, Zap, Database, Flame, BrainCircuit,
+  Terminal, Server, Network, Code
 } from 'lucide-astro';
 
 interface Props {
@@ -38,8 +26,10 @@ const iconMap: Record<string, any> = {
   'database': Database,
   'flame': Flame,
   'brain-circuit': BrainCircuit,
-  'snake': Terminal, // Fallback for Python
-  'server': Server
+  'snake': Terminal,
+  'server': Server,
+  'network': Network,
+  'code': Code
 };
 
 const IconComponent = iconMap[iconName] || Terminal;

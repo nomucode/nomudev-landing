@@ -39,43 +39,42 @@ export class ProjectService {
         return [
             {
                 id: 'backend',
-                title: 'Backend Engineering',
+                title: 'Backend & Core',
                 items: [
-                    { name: 'Java (Spring Boot)', icon: 'coffee' },
+                    { name: 'Java 21 (Spring Boot)', icon: 'coffee' },
                     { name: 'Python (FastAPI)', icon: 'snake' },
+                    { name: 'C# (.NET)', icon: 'hash' },
                     { name: 'Kotlin', icon: 'code-2' },
-                    { name: 'Node.js (NestJS)', icon: 'server' },
-                    { name: 'C# (.NET Core)', icon: 'hash' }
+                    { name: 'Node.js', icon: 'server' }
                 ]
             },
             {
-                id: 'devops',
-                title: 'DevOps & Cloud',
+                id: 'architecture-frontend',
+                title: 'Architecture & Frontend',
                 items: [
-                    { name: 'GCP (Cloud Run/GKE)', icon: 'cloud' },
-                    { name: 'Docker & K8s', icon: 'container' },
-                    { name: 'Terraform (IaC)', icon: 'ship' },
-                    { name: 'CI/CD (Azure/GHA)', icon: 'webhook' }
+                    { name: 'DDD / Hexagonal', icon: 'hexagon' },
+                    { name: 'Microservices / REST', icon: 'network' },
+                    { name: 'Next.js (SSR/ISR)', icon: 'layout-template' },
+                    { name: 'React & TypeScript', icon: 'code' }
                 ]
             },
             {
-                id: 'database',
-                title: 'Database & Data',
+                id: 'cloud-devops',
+                title: 'Cloud & DevOps (GCP)',
                 items: [
-                    { name: 'PostgreSQL', icon: 'database' },
-                    { name: 'Firestore / NoSQL', icon: 'flame' },
-                    { name: 'Redis (Caching)', icon: 'zap' },
-                    { name: 'BigQuery', icon: 'database' }
+                    { name: 'GCP (Run, Build, IAM)', icon: 'cloud' },
+                    { name: 'Firebase & VPC', icon: 'flame' },
+                    { name: 'Docker / Compose', icon: 'container' },
+                    { name: 'Azure Pipelines / GHA', icon: 'webhook' }
                 ]
             },
             {
-                id: 'other',
-                title: 'Other Technologies',
+                id: 'data-ai',
+                title: 'Data & Persistence',
                 items: [
-                    { name: 'Next.js & React', icon: 'layout-template' },
-                    { name: 'TypeScript', icon: 'code-2' },
-                    { name: 'Hexagonal Arch / DDD', icon: 'hexagon' },
-                    { name: 'Kafka / Event-Driven', icon: 'brain-circuit' }
+                    { name: 'PostgreSQL / MySQL', icon: 'database' },
+                    { name: 'MongoDB / Firestore', icon: 'server' }, // Using server as fallback for mongo/firestore if flame is taken or generic DB
+                    { name: 'Vertex AI Integration', icon: 'brain-circuit' }
                 ]
             }
         ];

@@ -1,0 +1,121 @@
+---
+---
+
+<div id="cookie-matrix" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-black/98 backdrop-blur-xl transition-all duration-1000">
+    <!-- Matrix Digital Rain Background Effect (CSS only for now) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+         <div class="absolute inset-0 bg-[linear-gradient(0deg,transparent,rgba(0,255,0,0.2))] bg-[size:100%_4px] animate-scan"></div>
+    </div>
+
+    <div id="matrix-content" class="relative z-10 max-w-2xl px-6 text-center transform transition-all duration-700">
+        <h2 class="text-4xl md:text-5xl font-mono text-accent-green mb-8 tracking-widest typing-effect">WAKE_UP_USER...</h2>
+        
+        <div class="space-y-6 font-mono text-lg text-green-400/80 mb-12 leading-relaxed">
+            <p>The Matrix has you...</p>
+            <p>This website uses cookies to track the truth of your navigation.</p>
+            <p>This is your last chance. After this, there is no turning back.</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-12 items-center justify-center mt-16">
+            
+            <!-- Blue Pill -->
+            <button id="pill-blue" class="group relative w-32 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-900 shadow-[0_0_20px_rgba(0,0,255,0.5)] hover:shadow-[0_0_40px_rgba(0,0,255,0.8)] transition-all duration-300 transform hover:scale-110">
+                <span class="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="relative z-10 font-bold text-white tracking-wider text-xs uppercase">Ignorance</span>
+                <!-- Reflection -->
+                <span class="absolute top-2 left-4 w-12 h-3 bg-white/40 rounded-full blur-[2px]"></span>
+            </button>
+
+            <!-- Red Pill -->
+            <button id="pill-red" class="group relative w-32 h-12 rounded-full bg-gradient-to-br from-red-500 to-red-900 shadow-[0_0_20px_rgba(255,0,0,0.5)] hover:shadow-[0_0_40px_rgba(255,0,0,0.8)] transition-all duration-300 transform hover:scale-110">
+                <span class="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="relative z-10 font-bold text-white tracking-wider text-xs uppercase">Truth</span>
+                <!-- Reflection -->
+                <span class="absolute top-2 left-4 w-12 h-3 bg-white/40 rounded-full blur-[2px]"></span>
+            </button>
+            
+        </div>
+        
+        <p class="mt-12 text-xs text-green-900 font-mono uppercase tracking-widest">
+            Choose wisely
+        </p>
+    </div>
+</div>
+
+<style>
+    .typing-effect {
+        overflow: hidden; /* Ensures the content is not revealed until the animation */
+        border-right: .15em solid green; /* The typwriter cursor */
+        white-space: nowrap; /* Keeps the content on a single line */
+        margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+        letter-spacing: .15em; /* Adjust as needed */
+        animation: 
+            typing 3.5s steps(40, end),
+            blink-caret .75s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: green; }
+    }
+    
+    @keyframes scan {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+    }
+    .animate-scan {
+        animation: scan 10s linear infinite;
+    }
+</style>
+
+<script>
+    const consent = localStorage.getItem('nomudev-matrix-consent');
+    const container = document.getElementById('cookie-matrix');
+    const content = document.getElementById('matrix-content');
+    const bluePill = document.getElementById('pill-blue');
+    const redPill = document.getElementById('pill-red');
+
+    // Only show if no consent stored
+    if (!consent && container) {
+        // Simple delay to let page load blink before "taking over"
+        setTimeout(() => {
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+        }, 1000);
+    }
+
+    function resolveChoice(choice: 'truth' | 'ignorance') {
+        localStorage.setItem('nomudev-matrix-consent', choice);
+        
+        if (!container || !content) return;
+
+        // Animate Out
+        content.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        content.style.opacity = '0';
+        content.style.transform = 'scale(0.9) blur(10px)';
+
+        setTimeout(() => {
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.classList.add('hidden');
+            }, 1000);
+        }, 500);
+
+        // Optional: Dispatch event for other components (analytics enable/disable)
+        if (choice === 'truth') {
+            console.log("Welcome to the real world.");
+            // enableAnalytics();
+        } else {
+            console.log("Ignorance is bliss.");
+        }
+    }
+
+    bluePill?.addEventListener('click', () => resolveChoice('ignorance'));
+    redPill?.addEventListener('click', () => resolveChoice('truth'));
+
+</script>

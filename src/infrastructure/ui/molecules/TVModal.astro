@@ -1,0 +1,367 @@
+---
+import { X, Volume2, Globe, Terminal, Cpu } from 'lucide-astro';
+---
+
+<div id="tv-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden pointer-events-none opacity-0 transition-opacity duration-300">
+  <!-- Backdrop with Matrix-like tint -->
+  <div id="tv-backdrop" class="absolute inset-0 bg-[#001100]/95 backdrop-blur-md transition-opacity duration-500">
+      <!-- Optional subtle grid background -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,255,100,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,100,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+  </div>
+
+  <!-- Tech Monitor Container -->
+  <div class="relative w-full max-w-5xl mx-4 aspect-video bg-black rounded-sm p-1 border border-accent-green/30 shadow-[0_0_30px_rgba(0,230,118,0.15)] transform scale-95 transition-transform duration-300 group" id="tv-set">
+    
+    <!-- Decorative Corner Brackets -->
+    <div class="absolute -top-[1px] -left-[1px] w-8 h-8 border-t-2 border-l-2 border-accent-green z-20"></div>
+    <div class="absolute -top-[1px] -right-[1px] w-8 h-8 border-t-2 border-r-2 border-accent-green z-20"></div>
+    <div class="absolute -bottom-[1px] -left-[1px] w-8 h-8 border-b-2 border-l-2 border-accent-green z-20"></div>
+    <div class="absolute -bottom-[1px] -right-[1px] w-8 h-8 border-b-2 border-r-2 border-accent-green z-20"></div>
+
+    <!-- Close Button (Digital Style) -->
+    <button id="tv-close-x" class="absolute -top-10 right-0 text-accent-green hover:text-white transition-colors z-50 bg-black/50 border border-accent-green/30 px-3 py-1 text-xs font-mono flex items-center gap-2 backdrop-blur-sm">
+       <span>[TERMINATE_SESSION]</span>
+       <X class="w-4 h-4" />
+    </button>
+
+    <!-- Monitor Screen Area -->
+    <div class="relative w-full h-full bg-[#050505] overflow-hidden z-10 box-border border border-[#222]">
+      
+      <!-- Video Container -->
+      <div id="youtube-player-placeholder" class="w-full h-full opacity-0"></div>
+
+      <!-- Digital Overlay Layer -->
+      <div class="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+        <!-- Digital Scanlines (Finer, green-tinted) -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(0,20,0,0)_50%,rgba(0,255,100,0.03)_50%),linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0))] bg-[length:100%_2px,100%_100%] pointer-events-none"></div>
+        
+        <!-- Screen Glow -->
+        <div class="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,200,100,0.05)]"></div>
+      </div>
+
+      <!-- Power/Boot Overlay (Green Terminal Flash) -->
+      <div id="tv-power-overlay" class="absolute inset-0 bg-[#001400] z-30 hidden flex items-center justify-center">
+          <div class="text-accent-green font-mono text-xl tracking-widest animate-pulse flex flex-col items-center gap-4">
+              <Terminal class="w-12 h-12" />
+              <span>ESTABLISHING SECURE CONNECTION...</span>
+              <div class="w-64 h-1 bg-[#112211] rounded-full overflow-hidden">
+                  <div class="h-full bg-accent-green animate-progress-bar"></div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Digital Glitch Overlay -->
+      <div id="tv-static-noise" class="absolute inset-0 bg-[#00ff41] mix-blend-color-dodge opacity-0 z-25 pointer-events-none"></div>
+    </div>
+    
+    <!-- Control Bar (Bottom HUD) -->
+    <div class="absolute -bottom-14 left-0 right-0 h-12 flex items-center justify-between font-mono text-xs text-accent-green/70">
+        
+       <div class="flex items-center gap-6 bg-black/40 border border-accent-green/20 px-4 py-2 rounded-sm backdrop-blur">
+          <!-- Connection Status -->
+          <div class="flex items-center gap-2 cursor-pointer group" id="tv-power-btn">
+             <div class="w-3 h-3 rounded-sm bg-accent-green shadow-[0_0_8px_#00e676] animate-pulse" id="power-led"></div>
+             <span class="tracking-widest group-hover:text-accent-green group-hover:shadow-[0_0_5px_#00e676] transition-all">SYSTEM_ONLINE</span>
+          </div>
+       </div>
+
+       <!-- System Info -->
+       <div class="flex items-center gap-4 text-[10px] tracking-widest opacity-60">
+           <div class="flex items-center gap-1">
+               <Cpu class="w-3 h-3" />
+               <span>CPU: 42%</span>
+           </div>
+           <div class="flex items-center gap-1">
+               <Globe class="w-3 h-3" />
+               <span>NET: 1Gbps</span>
+           </div>
+           <span>NOMUDEV_PROTOCOL_V4.0</span>
+       </div>
+
+       <!-- Volume Slider (Digital Gauge Style) -->
+       <div class="flex items-center gap-3 bg-black/40 border border-accent-green/20 px-4 py-2 rounded-sm backdrop-blur">
+           <Volume2 class="w-4 h-4 text-accent-green" />
+           <input 
+              id="tv-volume" 
+              type="range" 
+              min="0" 
+              max="100" 
+              value="50"
+              class="w-24 h-1 bg-[#112211] rounded-none appearance-none cursor-pointer accent-accent-green" 
+           />
+       </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Custom Range Slider Styling for Matrix Look */
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 4px;
+    background: #00e676; /* Accent Green */
+    margin-top: -4px;
+    box-shadow: 0 0 10px #00e676;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: #112211;
+    border: none;
+  }
+
+  @keyframes progress-load {
+      0% { width: 0%; }
+      100% { width: 100%; }
+  }
+  .animate-progress-bar {
+      animation: progress-load 2s ease-in-out infinite;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  // Load YouTube IFrame API
+  if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  }
+
+  let player: any = null;
+  let isTvOn = false;
+  let currentVideoId = 'wp43OdtAAkM';
+
+  // UI Elements
+  const modal = document.getElementById('tv-modal');
+  const powerOverlay = document.getElementById('tv-power-overlay');
+  const staticNoise = document.getElementById('tv-static-noise');
+  const volumeSlider = document.getElementById('tv-volume');
+  const playerPlaceholder = document.getElementById('youtube-player-placeholder');
+  
+  // Audio Context for Digital Sounds
+  const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+  function playDigitalBeep() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    // High pitched digital beep
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(2000, audioCtx.currentTime + 0.05);
+    
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  }
+
+  function playDataNoise() {
+     if (audioCtx.state === 'suspended') audioCtx.resume();
+     const bufferSize = audioCtx.sampleRate * 0.2;
+     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+     const data = buffer.getChannelData(0);
+     for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.1;
+     }
+
+     const noise = audioCtx.createBufferSource();
+     noise.buffer = buffer;
+     const gain = audioCtx.createGain();
+     gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+     noise.connect(gain);
+     gain.connect(audioCtx.destination);
+     noise.start();
+  }
+
+
+  // -------- Boot Sequence --------
+
+  function bootSystem() {
+    if (isTvOn) return;
+    isTvOn = true;
+    playDigitalBeep();
+
+    // Show Boot Overlay
+    powerOverlay!.classList.remove('hidden');
+    powerOverlay!.style.opacity = '1';
+    
+    // Simulate "Loading"
+    setTimeout(() => {
+        playDataNoise();
+        
+        // "Glitch" removal of overlay
+        powerOverlay!.style.clipPath = 'inset(0 0 0 0)';
+        
+        let glitchCount = 0;
+        const glitchInterval = setInterval(() => {
+            // Flash random opacities
+            powerOverlay!.style.opacity = Math.random() > 0.5 ? '1' : '0';
+            glitchCount++;
+            if (glitchCount > 5) {
+                clearInterval(glitchInterval);
+                powerOverlay!.classList.add('hidden');
+                powerOverlay!.style.opacity = '1'; // reset
+                
+                // Show Video (Ensure iframe is visible)
+                if (playerPlaceholder) playerPlaceholder.classList.remove('opacity-0');
+                
+                // If player exists, get the actual iframe and ensure it's visible
+                if (player && typeof player.getIframe === 'function') {
+                    const iframe = player.getIframe();
+                    if (iframe) iframe.classList.remove('opacity-0');
+                    if (typeof player.playVideo === 'function') player.playVideo();
+                }
+            }
+        }, 50);
+
+    }, 1500); // 1.5s boot time
+  }
+
+  function shutdownSystem() {
+    if (!isTvOn) return;
+    isTvOn = false;
+    playDigitalBeep();
+
+    if (player && typeof player.pauseVideo === 'function') {
+        player.pauseVideo();
+    }
+    
+    // Quick collapse
+    powerOverlay!.classList.remove('hidden');
+    powerOverlay!.innerHTML = ''; // Clear loading text for nice black screen
+    powerOverlay!.style.backgroundColor = 'black';
+    powerOverlay!.style.opacity = '0';
+    
+    requestAnimationFrame(() => {
+        powerOverlay!.style.transition = 'opacity 0.1s ease';
+        powerOverlay!.style.opacity = '1';
+        
+        setTimeout(() => {
+            closeModalLogic();
+        }, 300);
+    });
+  }
+
+
+  // -------- Modal Logic --------
+  
+  function openModal(videoId) {
+    currentVideoId = videoId;
+    modal!.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+    modal!.classList.add('flex', 'pointer-events-auto', 'opacity-100');
+
+    // Reset Overlay content in case it was cleared by shutdown
+    if (powerOverlay) {
+        powerOverlay.innerHTML = `
+          <div class="text-accent-green font-mono text-xl tracking-widest animate-pulse flex flex-col items-center gap-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 lucide lucide-terminal"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+              <span>ESTABLISHING SECURE CONNECTION...</span>
+              <div class="w-64 h-1 bg-[#112211] rounded-full overflow-hidden">
+                  <div class="h-full bg-accent-green animate-progress-bar"></div>
+              </div>
+          </div>
+        `;
+    }
+
+    // Initialize or Update Player
+    if (!player) {
+         // @ts-ignore
+         window.onYouTubeIframeAPIReady = function() {
+            // @ts-ignore
+            player = new YT.Player('youtube-player-placeholder', {
+                height: '100%',
+                width: '100%',
+                videoId: currentVideoId,
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 0, // Hide YT controls
+                    'disablekb': 1,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'iv_load_policy': 3
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        };
+        
+        if (window.YT && window.YT.Player) {
+             // @ts-ignore
+             player = new YT.Player('youtube-player-placeholder', {
+                height: '100%',
+                width: '100%',
+                videoId: currentVideoId,
+                playerVars: { 'playsinline': 1, 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3 },
+                events: { 'onReady': onPlayerReady }
+             });
+        }
+    } else {
+        player.loadVideoById(currentVideoId);
+        player.stopVideo(); 
+    }
+
+    // Auto Boot
+    setTimeout(() => {
+        bootSystem();
+    }, 300);
+  }
+
+  function closeModalLogic() {
+     modal!.classList.add('hidden', 'pointer-events-none', 'opacity-0');
+     modal!.classList.remove('flex', 'pointer-events-auto', 'opacity-100');
+     if(player) player.stopVideo();
+  }
+
+  function onPlayerReady(event) {
+    event.target.setVolume(50);
+  }
+
+  // --- Controls ---
+  
+  const powerBtn = document.getElementById('tv-power-btn');
+  powerBtn?.addEventListener('click', () => {
+    // Just toggle connection
+    if (isTvOn) shutdownSystem(); else bootSystem();
+  });
+
+  const closeX = document.getElementById('tv-close-x');
+  closeX?.addEventListener('click', () => {
+    shutdownSystem();
+  });
+
+  volumeSlider?.addEventListener('input', (e) => {
+    const vol = (e.target as HTMLInputElement).value;
+    if (player && typeof player.setVolume === 'function') {
+        player.setVolume(vol);
+    }
+  });
+
+  // Global Listeners
+  document.addEventListener('click', (e) => {
+    const target = (e.target as Element).closest('.js-open-tv-modal');
+    if (target) {
+        const videoId = target.getAttribute('data-video-id') || 'wp43OdtAAkM';
+        openModal(videoId);
+    }
+  });
+
+  const backdrop = document.getElementById('tv-backdrop');
+  backdrop?.addEventListener('click', () => {
+       shutdownSystem();
+  });
+
+</script>

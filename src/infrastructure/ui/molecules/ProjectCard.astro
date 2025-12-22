@@ -12,7 +12,7 @@ const { project } = Astro.props;
 ---
 
 <ThreeDCard class="h-full">
-  <article class="h-full group relative overflow-hidden rounded-xl border border-border bg-surface p-6 transition-all hover:border-text-muted">
+  <article class="h-full group relative overflow-hidden rounded-xl border border-border bg-surface p-6 transition-all hover:border-text-muted cursor-pointer js-open-tv-modal" data-video-id="wp43OdtAAkM">
     <div class="flex flex-col h-full justify-between relative z-10">
       <div>
         <div class="flex items-center justify-between mb-4">
@@ -44,8 +44,8 @@ const { project } = Astro.props;
         </div>
 
         <div class="pt-4 border-t border-border">
-           <Button variant="ghost" size="sm" class="group-hover:text-accent-green transition-colors pl-0">
-              Read Case Study &rarr;
+           <Button variant="ghost" size="sm" class="group-hover:text-accent-green transition-colors pl-0 pointer-events-none">
+              Watch Case Study &rarr;
            </Button>
         </div>
       </div>
