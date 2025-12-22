@@ -1,11 +1,22 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../infrastructure/ui/organisms/Hero.astro';
+import TechStack from '../infrastructure/ui/organisms/TechStack.astro';
+import FeaturedProjects from '../infrastructure/ui/organisms/FeaturedProjects.astro';
+import { ProjectService } from '../application/ProjectService';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const techStack = ProjectService.getTechStack();
+const featuredProjects = ProjectService.getFeaturedProjects();
 ---
 
 <Layout>
-	<Welcome />
+  <main>
+    <Hero />
+    <TechStack categories={techStack} />
+    <FeaturedProjects projects={featuredProjects} />
+  </main>
+  
+  <footer class="py-12 border-t border-border text-center text-text-muted text-sm font-mono">
+    <p>&copy; {new Date().getFullYear()} Engineering end-to-end solutions. Ready to scale your vision?</p>
+  </footer>
 </Layout>

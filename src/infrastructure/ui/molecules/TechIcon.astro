@@ -1,0 +1,50 @@
+---
+import { 
+  Coffee, 
+  Hash, 
+  Code2, 
+  Cloud, 
+  Webhook, 
+  Container, 
+  Ship, 
+  LayoutTemplate, 
+  Hexagon, 
+  Zap, 
+  Database, 
+  Flame, 
+  BrainCircuit,
+  Terminal,
+  Server
+} from 'lucide-astro';
+
+interface Props {
+  iconName: string;
+  class?: string;
+}
+
+const { iconName, class: className } = Astro.props;
+
+const iconMap: Record<string, any> = {
+  'coffee': Coffee,
+  'hash': Hash,
+  'code-2': Code2,
+  'cloud': Cloud,
+  'webhook': Webhook,
+  'container': Container,
+  'ship': Ship,
+  'layout-template': LayoutTemplate,
+  'hexagon': Hexagon,
+  'zap': Zap,
+  'database': Database,
+  'flame': Flame,
+  'brain-circuit': BrainCircuit,
+  'snake': Terminal, // Fallback for Python
+  'server': Server
+};
+
+const IconComponent = iconMap[iconName] || Terminal;
+---
+
+<div class={className}>
+  <IconComponent />
+</div>

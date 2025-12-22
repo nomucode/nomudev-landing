@@ -1,13 +1,30 @@
+---
+import '/src/styles/theme.css';
+import '@fontsource/inter';
+import '@fontsource/jetbrains-mono';
+
+interface Props {
+	title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Nomudev | Senior Backend & Cloud Architect",
+  description = "Portfolio of a Senior Fullstack Engineer specialized in Scalable Cloud Solutions, Microservices, and DDD."
+} = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
 	</head>
-	<body>
+	<body class="bg-primary text-text-main antialiased selection:bg-accent-blue selection:text-black">
 		<slot />
 	</body>
 </html>

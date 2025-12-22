@@ -1,0 +1,54 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class={`tilt-card ${className}`}>
+  <div class="tilt-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .tilt-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  .tilt-content {
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
+  }
+</style>
+
+<script>
+  // Vanilla JS Tilt Effect
+  const cards = document.querySelectorAll('.tilt-card');
+
+  cards.forEach(card => {
+    const content = card.querySelector('.tilt-content') as HTMLElement;
+
+    card.addEventListener('mousemove', (e) => {
+      // @ts-ignore
+      const rect = card.getBoundingClientRect();
+      // @ts-ignore
+      const x = e.clientX - rect.left;
+      // @ts-ignore
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg rotation
+      const rotateY = ((x - centerX) / centerX) * 10;
+
+      content.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      content.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    });
+  });
+</script>
