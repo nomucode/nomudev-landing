@@ -2,7 +2,9 @@
 import Button from '../atoms/Button.astro';
 import Button from '../atoms/Button.astro';
 import Badge from '../atoms/Badge.astro';
+import Badge from '../atoms/Badge.astro';
 import StylizedLogo from '../molecules/StylizedLogo.astro';
+import ContactButton from '../molecules/ContactButton';
 ---
 
 <section class="relative pt-32 pb-20 overflow-hidden">
@@ -24,9 +26,7 @@ import StylizedLogo from '../molecules/StylizedLogo.astro';
         <Button href="#projects" variant="primary" size="lg">
           View Architecture Case Studies
         </Button>
-        <Button href="#contact" variant="outline" size="lg">
-          Contact Me
-        </Button>
+        <ContactButton client:visible />
       </div>
     </div>
   </div>
