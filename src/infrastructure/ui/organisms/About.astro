@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../../../assets/images/noel-munoz.jpg';
+import { AVAILABILITY, LINKEDIN_URL, PROFILE } from '../../../application/ProfileService';
+import { getLang, useTranslations } from '../../../i18n';
+import SectionHeader from '../molecules/SectionHeader.astro';
+import BentoCell from '../molecules/BentoCell.astro';
+import StatBlock from '../molecules/StatBlock.astro';
+import Button from '../atoms/Button.astro';
+import Badge from '../atoms/Badge.astro';
+import StatusDot from '../atoms/StatusDot.astro';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang).about;
+
+// Etiqueta de caja: actúa como eyebrow de la celda
+const label = 'font-mono text-eyebrow uppercase text-fg-subtle';
+
+// Alturas (%) de la onda de audio, deterministas
+const waveform = [30, 55, 80, 45, 95, 60, 35, 70, 100, 50, 25, 65, 85, 40, 75, 55, 90, 35, 60, 45, 80, 30, 50, 70];
+---
+
+<section id="about" class="section-y scroll-mt-16">
+  <div class="container-page">
+    <SectionHeader index="03" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+
+    <!-- Bento 4 columnas: lectura en Z (identidad → rol → método → prueba → siguiente paso) -->
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <!-- A · Identidad (2×2) -->
+      <BentoCell class="flex flex-col p-3 md:col-span-2 lg:row-span-2">
+        <Image
+          src={photo}
+          alt={t.photoAlt(PROFILE.name)}
+          widths={[320, 627]}
+          sizes="(min-width: 1024px) 560px, 100vw"
+          class="relative h-64 w-full rounded-lg object-cover object-[50%_30%] grayscale-[20%] sm:h-80"
+        />
+        <div class="relative mt-auto p-3 pt-6 sm:p-5">
+          <h3 class="text-title font-semibold">{PROFILE.name}</h3>
+          <p class="mt-1 text-lg text-fg-body">{t.headline}</p>
+          <p class="mt-2 text-sm text-fg-muted">{t.location} · {t.reach}</p>
+        </div>
+      </BentoCell>
+
+      <!-- B · Rol actual (2×1) -->
+      <BentoCell class="p-6 md:col-span-2" style="--reveal-i: 1">
+        <p class={`relative ${label}`}>{t.labels.role}</p>
+        <h3 class="relative mt-3 text-h3 font-semibold">{t.roleTitle}</h3>
+        <p class="relative mt-2 text-fg-muted">{t.roleSummary}</p>
+      </BentoCell>
+
+      <!-- C · Método -->
+      <BentoCell class="p-6">
+        <p class={`relative ${label}`}>{t.labels.method}</p>
+        <ul class="relative mt-3 space-y-1.5 text-fg-body">
+          {t.method.map((item) => <li>{item}</li>)}
+        </ul>
+      </BentoCell>
+
+      <!-- D · Disponibilidad -->
+      <BentoCell class="p-6" style="--reveal-i: 1">
+        <p class={`relative ${label}`}>{t.labels.availability}</p>
+        <p class="relative mt-3 flex items-center gap-2 font-semibold text-fg">
+          <StatusDot />
+          {t.slots(AVAILABILITY.slots, AVAILABILITY.period[lang])}
+        </p>
+        <p class="relative mt-1.5 text-fg-muted">{t.replies(AVAILABILITY.responseTimeShort)}</p>
+      </BentoCell>
+
+      <!-- E · Stack (2×1) -->
+      <BentoCell class="p-6 md:col-span-2">
+        <p class={`relative ${label}`}>{t.labels.stack}</p>
+        <ul class="relative mt-4 flex flex-wrap gap-2">
+          {PROFILE.stack.map((tech) => (
+            <li class="rounded-sm border border-line bg-raised px-2.5 py-1.5 font-mono text-xs text-fg-body">{tech}</li>
+          ))}
+        </ul>
+      </BentoCell>
+
+      <!-- F · Off-stage: la caja memorable (único acento del grid) -->
+      <BentoCell class="border-primary/40 bg-primary/5 p-6" style="--reveal-i: 1">
+        <p class="relative font-mono text-eyebrow uppercase text-primary">{t.labels.offStage}</p>
+        <h3 class="relative mt-3 text-h3 font-semibold">{t.offStage.role}</h3>
+        <Badge tone="primary" class="relative mt-3">{PROFILE.certification}</Badge>
+        <p class="relative mt-4 text-sm text-fg-muted italic">“{t.offStage.quote}”</p>
+        <!-- Onda de audio: guiño a la faceta de técnico de sonido -->
+        <div class="relative mt-5 flex h-8 items-center gap-[3px]" aria-hidden="true">
+          {waveform.map((h, i) => (
+            <span class="wave-bar w-[3px] rounded-full bg-primary/70" style={`height: ${h}%; animation-delay: ${-(i * 0.09).toFixed(2)}s`}></span>
+          ))}
+        </div>
+      </BentoCell>
+
+      <!-- G · Prueba -->
+      <BentoCell class="p-6" style="--reveal-i: 2">
+        <p class={`relative ${label}`}>{t.labels.proof}</p>
+        <dl class="relative mt-4 grid gap-5">
+          {PROFILE.proof.map((value, i) => <StatBlock value={value} label={t.proof[i]} tone={i === 0 ? 'primary' : 'success'} />)}
+        </dl>
+      </BentoCell>
+
+      <!-- H · Trayectoria (3×1) -->
+      <BentoCell class="p-6 md:col-span-2 lg:col-span-3">
+        <p class={`relative ${label}`}>{t.labels.track}</p>
+        <div class="relative mt-4 lg:mt-6">
+          <div class="beam absolute inset-x-0 top-[5px] hidden lg:block" aria-hidden="true"></div>
+          <ol class="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PROFILE.timeline.map((item, i) => (
+              <li class="relative border-l border-line pl-4 lg:border-l-0 lg:pt-6 lg:pl-0">
+                <span class="absolute top-0 left-0 hidden size-3 rounded-full border-2 border-primary bg-surface lg:block" aria-hidden="true"></span>
+                <p class="font-mono text-xs text-fg-subtle">{item.year}</p>
+                <p class="mt-1 font-medium text-fg">{item.company}</p>
+                <p class="text-sm text-fg-muted">{t.timeline[i]}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </BentoCell>
+
+      <!-- I · Siguiente paso -->
+      <BentoCell class="flex flex-col p-6 md:col-span-2 lg:col-span-1" style="--reveal-i: 1">
+        <p class={`relative ${label}`}>{t.labels.next}</p>
+        <p class="relative mt-3 font-semibold text-fg">{t.nextTitle}</p>
+        <Button href={LINKEDIN_URL} external size="sm" class="relative mt-auto self-start">
+          {t.nextCta} <span aria-hidden="true">↗</span>
+        </Button>
+      </BentoCell>
+    </div>
+  </div>
+</section>

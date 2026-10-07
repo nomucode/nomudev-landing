@@ -1,0 +1,110 @@
+---
+// Composición decorativa del Hero: una mini-interfaz por servicio (Landing, Web App, Desktop, ERP),
+// cada una en el color de su categoría. Puramente ilustrativa (aria-hidden): los datos no son reales.
+
+import { getLang, useTranslations } from '../../../i18n';
+
+const d = useTranslations(getLang(Astro.currentLocale)).decor;
+const card = 'absolute overflow-hidden rounded-lg border border-line bg-surface/95 shadow-overlay backdrop-blur-sm';
+const tag = 'font-mono text-micro uppercase tracking-[0.12em]';
+const erpBars = [38, 62, 48, 80, 66, 92, 74];
+---
+
+<div class="relative mx-auto aspect-square w-full max-w-lg select-none lg:max-w-none lg:transform-[perspective(1400px)_rotateY(-7deg)_rotateX(3deg)]" aria-hidden="true">
+  <!-- Glow de fondo -->
+  <div class="absolute inset-[15%] rounded-full bg-primary opacity-[0.10] blur-[80px]"></div>
+
+  <!-- LANDING · navegador -->
+  <div class={`${card} float-y top-[12%] left-0 z-10 w-[70%]`} style="--cat: var(--color-cat-landing); --float-delay: 0s">
+    <div class="flex items-center gap-1.5 border-b border-line bg-raised px-3 py-2">
+      <span class="size-2 rounded-full bg-line-strong"></span>
+      <span class="size-2 rounded-full bg-line-strong"></span>
+      <span class="size-2 rounded-full bg-line-strong"></span>
+      <span class="ml-2 flex-1 truncate rounded-sm bg-canvas px-2 py-0.5 font-mono text-micro text-fg-subtle">yourbrand.com</span>
+    </div>
+    <div class="space-y-2 p-4 pr-[34%]">
+      <p class={`${tag} text-(--cat)`}>{d.landing}</p>
+      <div class="h-2.5 w-[85%] rounded-sm bg-fg/85"></div>
+      <div class="h-2.5 w-[60%] rounded-sm bg-fg/85"></div>
+      <div class="h-1.5 w-[90%] rounded-sm bg-fg-subtle/40"></div>
+      <div class="h-1.5 w-[70%] rounded-sm bg-fg-subtle/40"></div>
+      <div class="flex items-center gap-3 pt-2">
+        <div class="h-5 w-20 rounded-sm bg-(--cat)"></div>
+        <!-- Anillo de rendimiento -->
+        <div class="relative size-9 shrink-0">
+        <svg viewBox="0 0 36 36" class="size-full -rotate-90">
+          <circle cx="18" cy="18" r="15" fill="none" stroke="var(--color-line)" stroke-width="3"></circle>
+          <circle cx="18" cy="18" r="15" fill="none" stroke="var(--cat)" stroke-width="3" stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="2"></circle>
+        </svg>
+          <span class="absolute inset-0 flex items-center justify-center font-mono text-micro font-semibold text-(--cat)">100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEB APP · usuarios en tiempo real -->
+  <div class={`${card} float-y top-0 right-0 z-20 w-[42%] p-3.5`} style="--cat: var(--color-cat-webapp); --float-delay: -2s; --float-duration: 8s">
+    <div class="flex items-center justify-between">
+      <p class={`${tag} text-(--cat)`}>{d.webapp}</p>
+      <span class="flex items-center gap-1.5 font-mono text-micro text-fg-muted">
+        <span class="size-1.5 animate-pulse rounded-full bg-(--cat)"></span> {d.live}
+      </span>
+    </div>
+    <p class="mt-2 text-sm font-semibold text-fg">{d.activeUsers}</p>
+    <svg viewBox="0 0 120 44" class="mt-2 w-full" preserveAspectRatio="none">
+      <path d="M0 36 L15 30 L28 33 L42 22 L56 25 L70 14 L84 18 L98 8 L120 4 L120 44 L0 44 Z" fill="var(--cat)" fill-opacity="0.12"></path>
+      <path d="M0 36 L15 30 L28 33 L42 22 L56 25 L70 14 L84 18 L98 8 L120 4" fill="none" stroke="var(--cat)" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+    </svg>
+  </div>
+
+  <!-- DESKTOP · ventana nativa -->
+  <div class={`${card} float-y bottom-[3%] left-[5%] z-30 w-[46%]`} style="--cat: var(--color-cat-desktop); --float-delay: -4s; --float-duration: 9s">
+    <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
+      <span class="size-2 rounded-full bg-danger/70"></span>
+      <span class="size-2 rounded-full bg-cat-erp/70"></span>
+      <span class="size-2 rounded-full bg-success/70"></span>
+      <p class={`${tag} ml-auto text-(--cat)`}>{d.desktop}</p>
+    </div>
+    <div class="flex gap-2.5 p-3">
+      <div class="w-1/4 space-y-1.5">
+        <div class="h-1.5 rounded-sm bg-(--cat)/60"></div>
+        <div class="h-1.5 rounded-sm bg-fg-subtle/30"></div>
+        <div class="h-1.5 rounded-sm bg-fg-subtle/30"></div>
+        <div class="h-1.5 rounded-sm bg-fg-subtle/30"></div>
+      </div>
+      <div class="flex-1 space-y-1.5">
+        <div class="h-8 rounded-sm border border-line bg-raised"></div>
+        <div class="h-1.5 w-3/4 rounded-sm bg-fg-subtle/30"></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 border-t border-line px-3 py-1.5 font-mono text-micro text-fg-muted">
+      <span class="size-1.5 rounded-full bg-(--cat)"></span> {d.synced}
+    </div>
+  </div>
+
+  <!-- ERP · pipeline de pedidos -->
+  <div class={`${card} float-y right-0 bottom-[10%] z-40 w-[50%] p-3.5`} style="--cat: var(--color-cat-erp); --float-delay: -1s; --float-duration: 7.5s">
+    <div class="flex items-center justify-between">
+      <p class={`${tag} text-(--cat)`}>{d.erp}</p>
+      <span class="font-mono text-micro text-fg-subtle">{d.thisWeek}</span>
+    </div>
+    <p class="mt-2 text-sm font-semibold text-fg">{d.orders}</p>
+    <div class="mt-3 flex h-14 items-end gap-1.5">
+      {erpBars.map((h, i) => (
+        <div class="flex-1 rounded-t-sm bg-(--cat)" style={`height: ${h}%; opacity: ${0.35 + i * 0.1}`}></div>
+      ))}
+    </div>
+    <div class="mt-3 space-y-1.5 border-t border-line pt-2.5">
+      <div class="flex items-center gap-2">
+        <span class="size-1.5 rounded-full bg-success"></span>
+        <div class="h-1.5 flex-1 rounded-sm bg-fg-subtle/30"></div>
+        <span class="font-mono text-micro text-fg-muted">{d.invoiced}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="size-1.5 rounded-full bg-(--cat)"></span>
+        <div class="h-1.5 flex-1 rounded-sm bg-fg-subtle/30"></div>
+        <span class="font-mono text-micro text-fg-muted">{d.inStock}</span>
+      </div>
+    </div>
+  </div>
+</div>

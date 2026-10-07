@@ -1,0 +1,30 @@
+# nomudev — Noel Muñoz, desarrollo de software a medida en Valencia (España)
+
+> Noel Muñoz es ingeniero de software full-stack y CTO con base en Valencia, España. Bajo la marca nomudev desarrolla software a medida para empresas de Valencia, la Comunitat Valenciana y toda España (también en remoto e internacionalmente): webs y landing pages de alto rendimiento, aplicaciones web, aplicaciones de escritorio y ERPs con automatización de procesos. Trabaja con arquitectura hexagonal y Domain-Driven Design sobre Next.js, Spring Boot, Python y Google Cloud. Contacto: LinkedIn (https://www.linkedin.com/in/nomudev/).
+
+## Servicios (español)
+
+- [Desarrollo web y landing pages en Valencia](https://nomudev.com/desarrollo-web-valencia/): webs corporativas y landings rápidas, con SEO técnico y orientadas a conversión.
+- [Desarrollo de aplicaciones web a medida en Valencia](https://nomudev.com/desarrollo-aplicaciones-web-valencia/): aplicaciones web, SaaS y MVPs con Next.js, Spring Boot y Google Cloud.
+- [Aplicaciones de escritorio a medida](https://nomudev.com/aplicaciones-escritorio-a-medida/): apps para Windows y macOS que funcionan sin conexión e integran hardware.
+- [ERP a medida y automatización de procesos en Valencia](https://nomudev.com/erp-a-medida-valencia/): ERPs y CRMs a medida, migración de sistemas heredados por fases e integraciones.
+
+## Services (English)
+
+- [Website & landing page development](https://nomudev.com/en/web-development-valencia/)
+- [Custom web app development](https://nomudev.com/en/web-app-development/)
+- [Custom desktop app development](https://nomudev.com/en/desktop-app-development/)
+- [Custom ERP development & process automation](https://nomudev.com/en/custom-erp-development/)
+
+## Datos clave
+
+- Ubicación: Valencia, Comunitat Valenciana, España. Trabaja en remoto con toda España.
+- Rol actual: CTO en UNNE (arquitectura, core backend, dirección de equipo con Scrum).
+- Experiencia: Huming Music (migración de ERP a Next.js, datos musicales con Vertex AI), Infinity Apps (plataforma de catálogo musical).
+- Proceso: mensaje por LinkedIn → llamada de diagnóstico gratuita de 30 minutos → propuesta con alcance, plazos y precio cerrados.
+- Idiomas: español, valenciano, inglés.
+
+## Páginas principales
+
+- [Inicio (español)](https://nomudev.com/)
+- [Home (English)](https://nomudev.com/en/)

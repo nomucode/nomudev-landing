@@ -1,0 +1,14 @@
+---
+interface Props {
+  index?: string;
+  class?: string;
+}
+
+const { index, class: className } = Astro.props;
+---
+
+<p class={["flex items-center gap-2 font-mono text-eyebrow uppercase text-primary", className].filter(Boolean).join(' ')}>
+  <span class="text-fg-subtle">//</span>
+  {index && <span>{index} —</span>}
+  <slot />
+</p>

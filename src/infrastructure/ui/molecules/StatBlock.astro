@@ -1,0 +1,23 @@
+---
+interface Props {
+  value: string;
+  label: string;
+  tone?: 'primary' | 'success' | 'neutral' | 'category';
+  class?: string;
+}
+
+const { value, label, tone = 'neutral', class: className } = Astro.props;
+
+const tones = {
+  primary: 'text-primary',
+  success: 'text-success',
+  neutral: 'text-fg',
+  category: 'text-(--cat,var(--color-primary))', // hereda --cat de la sección de categoría
+};
+---
+
+<!-- dt antes que dd en el DOM (semántica); se invierte visualmente para mostrar primero la cifra -->
+<div class={['flex flex-col-reverse', className].filter(Boolean).join(' ')}>
+  <dt class="mt-2 font-mono text-eyebrow uppercase text-fg-subtle">{label}</dt>
+  <dd class={`font-mono text-metric font-semibold ${tones[tone]}`}>{value}</dd>
+</div>

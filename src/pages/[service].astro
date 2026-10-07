@@ -1,0 +1,16 @@
+---
+// Páginas de servicio en español: /desarrollo-web-valencia/, /erp-a-medida-valencia/…
+import ServicePage from '../infrastructure/ui/templates/ServicePage.astro';
+import { ProjectService } from '../application/ProjectService';
+
+export function getStaticPaths() {
+  return ProjectService.getCategories('es').map((category) => ({
+    params: { service: category.slug },
+    props: { id: category.id },
+  }));
+}
+
+const { id } = Astro.props;
+---
+
+<ServicePage id={id} />

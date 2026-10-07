@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import CyberRainTransition from './CyberRainTransition';
 
-const buttonClasses = "inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none h-12 py-3 px-8 text-lg border-2 border-border bg-transparent hover:bg-secondary hover:text-accent-green hover:border-accent-green cursor-pointer";
+// Mismo estilo que <Button variant="secondary" size="lg" /> (Button.astro)
+const buttonClasses = "group/btn inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-all duration-150 h-12 px-6 text-base border border-line bg-raised text-fg hover:border-line-strong hover:bg-overlay cursor-pointer";
 
 const ContactButton = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -49,7 +50,8 @@ const ContactButton = () => {
                 // Ensure this button is relative so it can be transformed
                 style={{ position: 'relative', zIndex: 10 }}
             >
-                Contact Me
+                Contact me
+                <span aria-hidden="true" className="text-fg-subtle transition-colors group-hover/btn:text-primary">↗</span>
             </button>
             <CyberRainTransition isActive={isTransitioning} />
         </>

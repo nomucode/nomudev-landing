@@ -1,0 +1,69 @@
+---
+import { Globe, AppWindow, Monitor, Layers } from 'lucide-astro';
+import { ProjectService } from '../../../application/ProjectService';
+import { LINKEDIN_URL } from '../../../application/ProfileService';
+import { getLang, useTranslations } from '../../../i18n';
+import SectionHeader from '../molecules/SectionHeader.astro';
+import BentoCell from '../molecules/BentoCell.astro';
+import ServiceIllustration from '../molecules/ServiceIllustration.astro';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang).services;
+const services = ProjectService.getCategories(lang);
+const icons = { 'globe': Globe, 'app-window': AppWindow, 'monitor': Monitor, 'layers': Layers };
+---
+
+<section id="services" class="section-y scroll-mt-16">
+  <div class="container-page">
+    <SectionHeader index="01" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+
+    <ul class="grid gap-4 md:grid-cols-2">
+      {services.map((service, i) => {
+        const Icon = icons[service.icon];
+        return (
+          <BentoCell as="li" class="group flex flex-col p-6 sm:p-8" style={`--cat: ${service.color}; --reveal-i: ${i % 2}`}>
+            <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--cat) to-transparent opacity-60" aria-hidden="true"></div>
+
+            <div class="relative mb-6">
+              <ServiceIllustration id={service.id} />
+            </div>
+
+            <div class="relative flex items-center gap-3">
+              <span class="flex size-10 items-center justify-center rounded-md border border-line bg-raised text-(--cat)">
+                <Icon class="size-5" stroke-width={1.5} />
+              </span>
+              <h3 class="text-h3 font-semibold">
+                <a href={service.href} class="transition-colors hover:text-(--cat)">{service.label}</a>
+              </h3>
+            </div>
+
+            <p class="relative mt-6 text-fg-muted italic">“{service.pain}”</p>
+            <p class="relative mt-4 text-lg font-semibold text-fg">{service.headline}</p>
+            <p class="relative mt-2 text-fg-body">{service.body}</p>
+
+            <ul class="relative mt-6 flex flex-wrap gap-2" aria-label={t.included}>
+              {service.tags.map((tag) => (
+                <li class="rounded-sm border border-line px-2 py-1 font-mono text-xs text-fg-muted">{tag}</li>
+              ))}
+            </ul>
+
+            <div class="relative mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 pt-8 text-sm font-medium">
+              <a href={service.href} class="inline-flex items-center gap-2 text-fg transition-colors hover:text-(--cat)">
+                {t.seeService}
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+              </a>
+              <a href={`#work-${service.id}`} class="text-fg-muted transition-colors hover:text-(--cat)">{t.seeWork}</a>
+            </div>
+          </BentoCell>
+        );
+      })}
+    </ul>
+
+    <p class="mt-10 text-center text-fg-muted" data-reveal>
+      {t.notSure}
+      <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="ml-1 font-medium text-primary underline-offset-4 hover:underline">
+        {t.askLinkedIn}
+      </a>
+    </p>
+  </div>
+</section>

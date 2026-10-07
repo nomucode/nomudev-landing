@@ -1,0 +1,236 @@
+---
+import { Check } from 'lucide-astro';
+import Layout from '../../../layouts/Layout.astro';
+import Button from '../atoms/Button.astro';
+import Eyebrow from '../atoms/Eyebrow.astro';
+import BentoCell from '../molecules/BentoCell.astro';
+import ProjectCard from '../molecules/ProjectCard.astro';
+import FaqList from '../molecules/FaqList.astro';
+import ServiceIllustration from '../molecules/ServiceIllustration.astro';
+import SectionDivider from '../molecules/SectionDivider.astro';
+import type { ProjectCategory } from '../../../domain/models';
+import { ProjectService } from '../../../application/ProjectService';
+import { SeoService } from '../../../application/SeoService';
+import { LINKEDIN_URL, SITE } from '../../../application/ProfileService';
+import { getLang, localizePath, useServicePages, useTranslations } from '../../../i18n';
+
+interface Props {
+  id: ProjectCategory;
+}
+
+const { id } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const sp = t.servicePage;
+const content = useServicePages(lang)[id];
+const category = ProjectService.getCategory(lang, id);
+const others = ProjectService.getCategories(lang).filter((c) => c.id !== id);
+const projects = ProjectService.getProjectsByCategory(lang, id);
+const home = localizePath('/', lang);
+
+const alternates = {
+  es: ProjectService.getCategory('es', id).href,
+  en: ProjectService.getCategory('en', id).href,
+};
+
+const crumbs = [
+  { name: sp.home, path: home },
+  { name: sp.services, path: `${home}#services` },
+  { name: category.label, path: category.href },
+];
+
+const absolute = (path: string) => new URL(path, SITE.url).href;
+const jsonLd = SeoService.graph([
+  SeoService.business(lang, ProjectService.getCategories(lang), absolute(`/og/nomudev-${lang}.png`), absolute('/apple-touch-icon.png')),
+  SeoService.service(lang, category, content),
+  SeoService.faq(content.faqs),
+  SeoService.breadcrumb(crumbs),
+]);
+---
+
+<Layout title={content.metaTitle} description={content.metaDescription} alternates={alternates} jsonLd={jsonLd}>
+  <main class="relative" style={`--cat: ${category.color}`}>
+    <div class="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+      <div class="grid-guides"></div>
+    </div>
+
+    <!-- Cabecera: breadcrumb + H1 + respuesta directa (AEO) -->
+    <section class="relative isolate overflow-hidden pt-10 pb-20 sm:pb-24">
+      <div class="bg-dots pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -top-40 right-[-10%] -z-10 size-140 rounded-full bg-(--cat) opacity-[0.10] blur-[120px]" aria-hidden="true"></div>
+
+      <div class="container-page">
+        <nav aria-label={t.a11y.breadcrumb} class="text-sm text-fg-subtle">
+          <ol class="flex flex-wrap items-center gap-2">
+            {crumbs.map((crumb, i) => (
+              <li class="flex items-center gap-2">
+                {i < crumbs.length - 1 ? (
+                  <a href={crumb.path} class="transition-colors hover:text-fg">{crumb.name}</a>
+                ) : (
+                  <span aria-current="page" class="text-fg-muted">{crumb.name}</span>
+                )}
+                {i < crumbs.length - 1 && <span aria-hidden="true">/</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div class="mt-12 grid items-center gap-12 lg:grid-cols-12">
+          <div class="lg:col-span-7">
+            <p class="font-mono text-eyebrow uppercase text-(--cat)">{category.shortLabel}</p>
+            <h1 class="mt-4 text-display font-bold">{content.h1}</h1>
+            <p class="mt-6 max-w-[62ch] text-lead text-fg-body">{content.answer}</p>
+            <div class="mt-10 flex flex-wrap items-center gap-3">
+              <Button href={LINKEDIN_URL} external size="lg" aria-label={t.hero.ctaPrimaryAria}>
+                {t.hero.ctaPrimary} <span aria-hidden="true">↗</span>
+              </Button>
+              <Button href="#work" variant="secondary" size="lg">{sp.workTitle} <span aria-hidden="true">→</span></Button>
+            </div>
+          </div>
+          <div class="lg:col-span-5">
+            <ServiceIllustration id={id} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- Beneficios -->
+    <section class="section-y">
+      <div class="container-page">
+        <Eyebrow index="01">{sp.benefitsTitle}</Eyebrow>
+        <h2 class="mt-4 max-w-2xl text-h2 font-semibold">{category.headline}</h2>
+        <ul class="mt-12 grid gap-4 md:grid-cols-3">
+          {content.benefits.map((benefit, i) => (
+            <BentoCell as="li" class="p-6 sm:p-8" style={`--reveal-i: ${i}`}>
+              <p class="relative font-mono text-eyebrow text-(--cat)">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="relative mt-3 text-h3 font-semibold">{benefit.title}</h3>
+              <p class="relative mt-2 text-fg-muted">{benefit.body}</p>
+            </BentoCell>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- Qué incluye + para quién -->
+    <section class="section-y">
+      <div class="container-page grid gap-4 lg:grid-cols-12">
+        <BentoCell class="p-6 sm:p-8 lg:col-span-7">
+          <h2 class="relative text-h3 font-semibold">{sp.includesTitle}</h2>
+          <ul class="relative mt-6 grid gap-3 sm:grid-cols-2">
+            {content.includes.map((item) => (
+              <li class="flex items-start gap-3 text-fg-body">
+                <Check class="mt-0.5 size-5 shrink-0 text-(--cat)" stroke-width={2} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <ul class="relative mt-8 flex flex-wrap gap-2">
+            {category.tags.map((tag) => (
+              <li class="rounded-sm border border-line px-2 py-1 font-mono text-xs text-fg-muted">{tag}</li>
+            ))}
+          </ul>
+        </BentoCell>
+        <BentoCell class="p-6 sm:p-8 lg:col-span-5" style="--reveal-i: 1">
+          <h2 class="relative text-h3 font-semibold">{sp.idealTitle}</h2>
+          <ul class="relative mt-6 space-y-4">
+            {content.ideal.map((item) => (
+              <li class="border-l-2 border-(--cat) pl-4 text-fg-body">{item}</li>
+            ))}
+          </ul>
+          <p class="relative mt-8 text-fg-muted italic">“{category.pain}”</p>
+        </BentoCell>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- Proceso -->
+    <section class="section-y">
+      <div class="container-page">
+        <Eyebrow index="02">{sp.processTitle}</Eyebrow>
+        <div class="relative mt-10">
+          <div class="beam absolute inset-x-0 top-1/2 hidden sm:block" aria-hidden="true"></div>
+          <ol class="relative grid gap-4 sm:grid-cols-3">
+            {t.contact.steps.map((step, i) => (
+              <li class="relative rounded-lg border border-line bg-raised p-6">
+                <p class="font-mono text-eyebrow text-(--cat)">{String(i + 1).padStart(2, '0')}</p>
+                <h3 class="mt-2 font-semibold text-fg">{step.title}</h3>
+                <p class="mt-1 text-sm text-fg-muted">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- Proyectos relacionados -->
+    <section id="work" class="section-y scroll-mt-16">
+      <div class="container-page">
+        <Eyebrow index="03">{sp.workTitle}</Eyebrow>
+        {projects.length > 0 ? (
+          <div class="mt-10 grid gap-4 md:grid-cols-2">
+            {projects.map((project, i) => (
+              <ProjectCard project={project} featured={i === 0} revealIndex={i % 2} class={i === 0 ? 'md:col-span-2' : ''} />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-6 max-w-xl text-fg-muted">{sp.noWork}</p>
+        )}
+        <a href={`${home}#work`} class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-(--cat)">
+          {sp.allWork} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- FAQ del servicio (FAQPage en JSON-LD) -->
+    <section class="section-y">
+      <div class="container-page grid gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <Eyebrow index="04">{category.shortLabel}</Eyebrow>
+          <h2 class="mt-4 text-h2 font-semibold">{sp.faqTitle}</h2>
+        </div>
+        <div class="lg:col-span-8" data-reveal>
+          <FaqList items={content.faqs} />
+        </div>
+      </div>
+    </section>
+
+    <SectionDivider />
+
+    <!-- Otros servicios + CTA -->
+    <section class="section-y">
+      <div class="container-page">
+        <p class="font-mono text-eyebrow uppercase text-fg-subtle">{sp.otherServices}</p>
+        <ul class="mt-4 grid gap-4 md:grid-cols-3">
+          {others.map((other) => (
+            <li style={`--cat: ${other.color}`}>
+              <a href={other.href} class="bento-cell group block p-6">
+                <p class="relative font-semibold text-fg transition-colors group-hover:text-(--cat)">{other.label}</p>
+                <p class="relative mt-1 text-sm text-fg-muted">{other.headline}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="relative isolate mt-16 overflow-hidden rounded-xl border border-line bg-surface px-6 py-14 text-center shadow-card sm:px-12" data-reveal>
+          <div class="bg-dots pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+          <h2 class="text-h2 font-semibold">{sp.ctaTitle}</h2>
+          <p class="mx-auto mt-4 max-w-xl text-lead text-fg-muted">{sp.ctaBody}</p>
+          <div class="mt-8 flex justify-center">
+            <Button href={LINKEDIN_URL} external size="lg" aria-label={t.contact.ctaAria}>
+              {t.contact.cta} <span aria-hidden="true">↗</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

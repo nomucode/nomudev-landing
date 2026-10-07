@@ -1,0 +1,13 @@
+---
+interface Props {
+  status?: 'available' | 'busy';
+}
+
+const { status = 'available' } = Astro.props;
+const color = status === 'available' ? 'bg-success' : 'bg-cat-erp';
+---
+
+<span class="relative inline-flex size-2" aria-hidden="true">
+  <span class={`absolute inline-flex size-full animate-ping rounded-full opacity-60 ${color}`}></span>
+  <span class={`relative inline-flex size-2 rounded-full ${color}`}></span>
+</span>

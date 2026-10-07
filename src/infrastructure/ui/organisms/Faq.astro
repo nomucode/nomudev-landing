@@ -1,0 +1,18 @@
+---
+import { getLang, useTranslations } from '../../../i18n';
+import SectionHeader from '../molecules/SectionHeader.astro';
+import FaqList from '../molecules/FaqList.astro';
+
+const t = useTranslations(getLang(Astro.currentLocale)).faq;
+---
+
+<section id="faq" class="section-y scroll-mt-16">
+  <div class="container-page grid gap-10 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <SectionHeader index="04" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+    </div>
+    <div class="lg:col-span-8" data-reveal>
+      <FaqList items={t.items} />
+    </div>
+  </div>
+</section>

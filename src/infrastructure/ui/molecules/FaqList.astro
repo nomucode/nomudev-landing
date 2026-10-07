@@ -1,0 +1,22 @@
+---
+// Acordeón nativo (<details>): accesible, sin JS y con el contenido en el HTML (indexable por buscadores e IA)
+interface Props {
+  items: { q: string; a: string }[];
+  headingLevel?: 3 | 4;
+}
+
+const { items, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h3' | 'h4';
+---
+
+<div class="divide-y divide-line rounded-xl border border-line bg-surface">
+  {items.map((item, i) => (
+    <details class="group px-6 py-5 sm:px-8" open={i === 0}>
+      <summary class="flex cursor-pointer list-none items-start justify-between gap-6 [&::-webkit-details-marker]:hidden">
+        <Heading class="text-lg font-semibold text-fg">{item.q}</Heading>
+        <span class="mt-1 flex size-6 shrink-0 items-center justify-center rounded-full border border-line text-fg-muted transition-transform duration-(--duration-base) group-open:rotate-45" aria-hidden="true">+</span>
+      </summary>
+      <p class="mt-3 max-w-[70ch] text-fg-muted">{item.a}</p>
+    </details>
+  ))}
+</div>

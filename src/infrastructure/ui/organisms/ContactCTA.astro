@@ -1,0 +1,51 @@
+---
+import { AVAILABILITY, LINKEDIN_URL } from '../../../application/ProfileService';
+import { getLang, useTranslations } from '../../../i18n';
+import Eyebrow from '../atoms/Eyebrow.astro';
+import Button from '../atoms/Button.astro';
+import StatusDot from '../atoms/StatusDot.astro';
+
+const lang = getLang(Astro.currentLocale);
+const dict = useTranslations(lang);
+const t = dict.contact;
+---
+
+<section id="contact" class="section-y scroll-mt-16">
+  <div class="container-page">
+    <div class="relative isolate overflow-hidden rounded-xl border border-line bg-surface px-6 py-16 text-center shadow-card sm:px-12 sm:py-20" data-reveal>
+      <div class="bg-dots pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -top-32 left-1/2 -z-10 size-120 -translate-x-1/2 rounded-full bg-primary opacity-[0.10] blur-[120px]" aria-hidden="true"></div>
+
+      <Eyebrow index="05" class="justify-center">{t.eyebrow}</Eyebrow>
+      <h2 class="mx-auto mt-4 max-w-2xl text-h2 font-semibold">{t.title}</h2>
+      <p class="mx-auto mt-6 max-w-[60ch] text-lead text-fg-muted">{t.body(AVAILABILITY.responseTime[lang])}</p>
+
+      <div class="mt-10 flex flex-col items-center gap-3">
+        <Button href={LINKEDIN_URL} external size="lg" aria-label={t.ctaAria}>
+          {t.cta} <span aria-hidden="true">↗</span>
+        </Button>
+        <p class="text-sm text-fg-subtle">{t.micro}</p>
+      </div>
+
+      <!-- Haz de luz que conecta los tres pasos (visible en los huecos entre tarjetas) -->
+      <div class="relative mx-auto mt-14 max-w-4xl">
+        <div class="beam absolute inset-x-0 top-1/2 hidden sm:block" aria-hidden="true"></div>
+        <ol class="relative grid gap-4 text-left sm:grid-cols-3">
+          {t.steps.map((step, i) => (
+            <li class="relative rounded-lg border border-line bg-raised p-5">
+              <p class="font-mono text-eyebrow text-primary">{String(i + 1).padStart(2, '0')}</p>
+              <p class="mt-2 font-semibold text-fg">{step.title}</p>
+              <p class="mt-1 text-sm text-fg-muted">{step.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <p class="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-fg-muted">
+        <span class="inline-flex items-center gap-2"><StatusDot /> {t.taking(AVAILABILITY.slots, AVAILABILITY.period[lang])}</span>
+        <span aria-hidden="true" class="text-fg-subtle">·</span>
+        <span>{t.currently(dict.about.roleTitle)}</span>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,21 +1,21 @@
 ---
 interface Props {
-  variant?: 'default' | 'outline' | 'accent';
+  tone?: 'neutral' | 'primary' | 'success';
+  class?: string;
 }
 
-const { variant = 'default' } = Astro.props;
+const { tone = 'neutral', class: className } = Astro.props;
 
-const baseStyles = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium font-mono transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
+const baseStyles =
+  "inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 font-mono text-xs leading-none font-medium tracking-[0.02em]";
 
-const variants = {
-  default: "bg-surface text-text-main border border-transparent",
-  outline: "text-text-muted border border-border",
-  accent: "bg-accent-blue text-black border border-transparent bg-opacity-10 text-accent-blue"
+const tones = {
+  neutral: "border-line bg-raised text-fg-muted",
+  primary: "border-primary/25 bg-primary/10 text-primary",
+  success: "border-success/25 bg-success/10 text-success",
 };
-
-const className = [baseStyles, variants[variant]].join(' ');
 ---
 
-<span class={className}>
+<span class={[baseStyles, tones[tone], className].filter(Boolean).join(' ')}>
   <slot />
 </span>

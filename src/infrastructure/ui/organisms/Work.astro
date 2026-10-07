@@ -1,0 +1,35 @@
+---
+import { ProjectService } from '../../../application/ProjectService';
+import SectionHeader from '../molecules/SectionHeader.astro';
+import CategoryNav from '../molecules/CategoryNav.astro';
+import CategorySection from './CategorySection.astro';
+import { getLang, useTranslations } from '../../../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang).work;
+
+const categories = ProjectService.getCategories(lang).map((category) => ({
+  ...category,
+  projects: ProjectService.getProjectsByCategory(lang, category.id),
+}));
+const navItems = categories.map(({ projects, ...category }) => ({ ...category, count: projects.length }));
+---
+
+<section id="work" class="relative isolate scroll-mt-16 pt-(--spacing-section)">
+  <div class="pointer-events-none absolute top-1/3 left-[-10%] -z-10 size-140 rounded-full bg-success opacity-[0.05] blur-[120px]" aria-hidden="true"></div>
+
+  <div class="container-page">
+    <SectionHeader
+      index="02"
+      eyebrow={t.eyebrow}
+      title={t.title}
+      lead={t.lead}
+    />
+
+    <CategoryNav categories={navItems} />
+
+    {categories.map((category, i) => (
+      <CategorySection category={category} projects={category.projects} index={i} />
+    ))}
+  </div>
+</section>

@@ -1,0 +1,53 @@
+---
+import { getImage } from 'astro:assets';
+import Layout from '../../../layouts/Layout.astro';
+import Hero from '../organisms/Hero.astro';
+import Services from '../organisms/Services.astro';
+import Work from '../organisms/Work.astro';
+import About from '../organisms/About.astro';
+import Faq from '../organisms/Faq.astro';
+import ContactCTA from '../organisms/ContactCTA.astro';
+import SectionDivider from '../molecules/SectionDivider.astro';
+import photo from '../../../assets/images/noel-munoz.jpg';
+import logo from '../../../assets/brand/nomudev-mark.png';
+import { ProjectService } from '../../../application/ProjectService';
+import { SeoService } from '../../../application/SeoService';
+import { SITE } from '../../../application/ProfileService';
+import { getLang, useTranslations } from '../../../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const categories = ProjectService.getCategories(lang);
+
+const absolute = (path: string) => new URL(path, SITE.url).href;
+const photoImg = await getImage({ src: photo, width: 600, format: 'jpg' });
+const logoImg = await getImage({ src: logo, width: 256, format: 'png' });
+
+const jsonLd = SeoService.graph([
+  SeoService.website(lang),
+  SeoService.business(lang, categories, absolute(`/og/nomudev-${lang}.png`), absolute(logoImg.src)),
+  SeoService.person(lang, absolute(photoImg.src)),
+  SeoService.faq(t.faq.items),
+]);
+---
+
+<Layout title={t.meta.homeTitle} description={t.meta.homeDescription} alternates={{ es: '/', en: '/en/' }} jsonLd={jsonLd}>
+  <main class="relative">
+    <!-- Grid estructural: guías verticales en los bordes del contenedor -->
+    <div class="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+      <div class="grid-guides"></div>
+    </div>
+
+    <Hero />
+    <SectionDivider />
+    <Services />
+    <SectionDivider />
+    <Work />
+    <SectionDivider />
+    <About />
+    <SectionDivider />
+    <Faq />
+    <SectionDivider />
+    <ContactCTA />
+  </main>
+</Layout>

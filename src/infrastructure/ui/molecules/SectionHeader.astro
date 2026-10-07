@@ -1,0 +1,20 @@
+---
+import Eyebrow from '../atoms/Eyebrow.astro';
+
+interface Props {
+  index?: string;
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center';
+}
+
+const { index, eyebrow, title, lead, align = 'left' } = Astro.props;
+const centered = align === 'center';
+---
+
+<header class={`mb-12 max-w-2xl ${centered ? 'mx-auto text-center' : ''}`} data-reveal>
+  <Eyebrow index={index} class={centered ? 'justify-center' : ''}>{eyebrow}</Eyebrow>
+  <h2 class="mt-4 text-h2 font-semibold">{title}</h2>
+  {lead && <p class="mt-4 text-lead text-fg-muted">{lead}</p>}
+</header>

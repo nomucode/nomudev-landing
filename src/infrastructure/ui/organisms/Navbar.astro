@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../../../assets/brand/nomudev-mark.png';
+import Button from '../atoms/Button.astro';
+import { LINKEDIN_URL } from '../../../application/ProfileService';
+import { getLang, localizePath, useTranslations, type Lang } from '../../../i18n';
+
+interface Props {
+  alternates: Record<Lang, string>;
+}
+
+const { alternates } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const home = localizePath('/', lang);
+const otherLang: Lang = lang === 'es' ? 'en' : 'es';
+
+const links = [
+  { href: `${home}#services`, label: t.nav.services },
+  { href: `${home}#work`, label: t.nav.work },
+  { href: `${home}#about`, label: t.nav.about },
+  { href: `${home}#faq`, label: t.nav.faq },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-line/60 bg-canvas/70 backdrop-blur-xl supports-backdrop-filter:bg-canvas/60">
+  <nav class="container-page flex h-16 items-center justify-between gap-6" aria-label={t.a11y.mainNav}>
+    <a href={home} class="group flex items-center gap-2.5" aria-label={t.a11y.home}>
+      <Image src={logo} alt="" width={28} height={28} densities={[1, 2]} class="size-7 object-contain transition-transform duration-300 group-hover:rotate-[-8deg]" />
+      <span class="font-mono text-sm font-semibold tracking-tight text-fg">nomudev</span>
+    </a>
+
+    <div class="flex items-center gap-1 sm:gap-2">
+      <ul class="hidden items-center gap-1 md:flex">
+        {links.map((link) => (
+          <li>
+            <a href={link.href} class="rounded-md px-3 py-2 text-sm text-fg-muted transition-colors hover:bg-raised hover:text-fg">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={alternates[otherLang]}
+        hreflang={otherLang}
+        lang={otherLang}
+        class="rounded-md px-2.5 py-2 font-mono text-xs font-medium text-fg-muted uppercase transition-colors hover:bg-raised hover:text-fg"
+        aria-label={t.a11y.langSwitch}
+      >
+        {otherLang}
+      </a>
+      <Button href={LINKEDIN_URL} external variant="secondary" size="sm">
+        <span class="hidden sm:inline">{t.nav.linkedin}</span>
+        <span class="sm:hidden">{t.nav.linkedinShort}</span>
+        <span aria-hidden="true" class="text-fg-subtle transition-colors group-hover/btn:text-primary">↗</span>
+      </Button>
+    </div>
+  </nav>
+</header>

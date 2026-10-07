@@ -1,40 +1,115 @@
 ---
-import '/src/styles/theme.css';
-import '@fontsource/inter';
-import '@fontsource/jetbrains-mono';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/theme.css';
+import Navbar from '../infrastructure/ui/organisms/Navbar.astro';
+import Footer from '../infrastructure/ui/organisms/Footer.astro';
+import { LANGS, LOCALE_META, getLang, useTranslations, type Lang } from '../i18n';
+import { SITE } from '../application/ProfileService';
 
 interface Props {
-	title?: string;
-  description?: string;
+  title: string;
+  description: string;
+  // Ruta de esta página en cada idioma (para canónica + hreflang)
+  alternates: Record<Lang, string>;
+  // Grafo JSON-LD ya serializado (SeoService.graph)
+  jsonLd?: string;
+  ogImage?: string;
+  noindex?: boolean;
 }
 
-const { 
-  title = "Nomudev | Senior Backend & Cloud Architect",
-  description = "Portfolio of a Senior Fullstack Engineer specialized in Scalable Cloud Solutions, Microservices, and DDD."
-} = Astro.props;
+const { title, description, alternates, jsonLd, ogImage, noindex = false } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const meta = LOCALE_META[lang];
+
+const absolute = (path: string) => new URL(path, SITE.url).href;
+const canonical = absolute(alternates[lang]);
+const image = absolute(ogImage ?? `/og/nomudev-${lang}.png`);
+const otherLang: Lang = lang === 'es' ? 'en' : 'es';
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="bg-primary text-text-main antialiased selection:bg-accent-blue selection:text-black">
-		<slot />
-	</body>
+<html lang={meta.htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <link rel="canonical" href={canonical} />
+    {LANGS.map((l) => <link rel="alternate" hreflang={LOCALE_META[l].htmlLang} href={absolute(alternates[l])} />)}
+    <link rel="alternate" hreflang="x-default" href={absolute(alternates.es)} />
+
+    <!-- Open Graph / redes -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={meta.ogLocale} />
+    <meta property="og:locale:alternate" content={LOCALE_META[otherLang].ogLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <!-- SEO local -->
+    <meta name="geo.region" content={SITE.regionCode} />
+    <meta name="geo.placename" content={SITE.locality} />
+    <meta name="geo.position" content={`${SITE.geo.latitude};${SITE.geo.longitude}`} />
+    <meta name="ICBM" content={`${SITE.geo.latitude}, ${SITE.geo.longitude}`} />
+
+    <meta name="theme-color" content="#09090b" /><!-- tokens-ignore: meta requiere un literal (= --zinc-950) -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body class="min-h-screen bg-canvas">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-canvas">
+      {t.a11y.skip}
+    </a>
+    <Navbar alternates={alternates} />
+    <div id="main">
+      <slot />
+    </div>
+    <Footer alternates={alternates} />
+    <div class="grain pointer-events-none fixed inset-0 z-70" aria-hidden="true"></div>
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  /* Ruido sutil que elimina el banding de los gradientes */
+  .grain {
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 </style>
+
+<script>
+  // Revela los elementos [data-reveal] al entrar en el viewport
+  const revealed = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' }
+    );
+    revealed.forEach((el) => observer.observe(el));
+  } else {
+    revealed.forEach((el) => el.classList.add('is-visible'));
+  }
+</script>

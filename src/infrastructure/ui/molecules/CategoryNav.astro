@@ -1,0 +1,53 @@
+---
+import type { ProjectCategoryInfo } from '../../../domain/models';
+import { getLang, useTranslations } from '../../../i18n';
+
+interface Props {
+  categories: (ProjectCategoryInfo & { count: number })[];
+}
+
+const { categories } = Astro.props;
+const t = useTranslations(getLang(Astro.currentLocale));
+---
+
+<!-- Navegación fija bajo la Navbar; resalta la categoría visible (scrollspy) -->
+<nav class="sticky top-16 z-40 -mx-4 mb-4 border-y border-line/60 bg-canvas/70 px-4 backdrop-blur-xl sm:mx-0 sm:rounded-lg sm:border sm:px-2" aria-label={t.a11y.categoriesNav}>
+  <ul class="no-scrollbar flex gap-1 overflow-x-auto py-2">
+    {categories.map((category) => (
+      <li class="shrink-0">
+        <a
+          href={`#work-${category.id}`}
+          data-category-link={category.id}
+          style={`--cat: ${category.color}`}
+          class="group flex items-center gap-2 rounded-full border border-transparent px-3.5 py-1.5 text-sm text-fg-muted transition-colors hover:text-fg aria-[current=true]:border-line aria-[current=true]:bg-raised aria-[current=true]:text-fg"
+        >
+          <span class="size-1.5 rounded-full bg-(--cat) opacity-60 transition-opacity group-aria-[current=true]:opacity-100" aria-hidden="true"></span>
+          {category.shortLabel}
+          <span class="font-mono text-xs text-fg-subtle">{category.count}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-category-link]');
+  const sections = [...links]
+    .map((link) => document.getElementById(`work-${link.dataset.categoryLink}`))
+    .filter((el): el is HTMLElement => el !== null);
+
+  const setCurrent = (id: string) => {
+    links.forEach((link) => link.setAttribute('aria-current', String(link.dataset.categoryLink === id)));
+  };
+
+  // La sección activa es la que cruza la franja superior del viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setCurrent(entry.target.id.replace('work-', ''));
+      }
+    },
+    { rootMargin: '-30% 0px -60% 0px' }
+  );
+  sections.forEach((section) => observer.observe(section));
+</script>

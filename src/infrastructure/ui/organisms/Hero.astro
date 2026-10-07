@@ -1,71 +1,68 @@
 ---
 import Button from '../atoms/Button.astro';
-import Button from '../atoms/Button.astro';
 import Badge from '../atoms/Badge.astro';
-import Badge from '../atoms/Badge.astro';
-import StylizedLogo from '../molecules/StylizedLogo.astro';
-import ContactButton from '../molecules/ContactButton';
+import StatusDot from '../atoms/StatusDot.astro';
+import ProductBento from '../molecules/ProductBento.astro';
+import { AVAILABILITY, LINKEDIN_URL, PROFILE } from '../../../application/ProfileService';
+import { getLang, useTranslations } from '../../../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang).hero;
 ---
 
-<section class="relative pt-32 pb-20 overflow-hidden">
-  <div class="max-w-[var(--spacing-container)] mx-auto px-4 sm:px-6 relative z-10">
-    <div class="max-w-3xl">
-      <div class="mb-6 animate-fade-in-up">
-        <Badge variant="accent">Available for Contract Work</Badge>
+<section class="relative isolate overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28">
+  <!-- Fondo: dot-grid + aurora -->
+  <div class="bg-dots pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -top-40 right-[-10%] -z-10 size-160 rounded-full bg-primary opacity-[0.12] blur-[120px]" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute top-40 left-[-15%] -z-10 size-120 rounded-full bg-success opacity-[0.06] blur-[120px]" aria-hidden="true"></div>
+
+  <div class="container-page grid items-center gap-16 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-7">
+      <div class="hero-in" style="--i: 0">
+        <Badge tone="success">
+          <StatusDot />
+          <span class="hidden sm:inline">{t.badgeLead}</span> {t.badge(AVAILABILITY.slots, AVAILABILITY.period[lang])}
+        </Badge>
       </div>
-      
-      <h1 class="text-5xl sm:text-6xl font-bold tracking-tight mb-6 animate-fade-in-up delay-100 leading-tight">
-        Forging High-Performance Digital Products with <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-green">Next.js & Google Cloud Architecture</span>.
+
+      <h1 class="hero-in mt-8 text-display font-bold" style="--i: 1">
+        {t.h1Before}<span class="text-gradient">{t.h1Gradient}</span>{t.h1After}
       </h1>
-      
-      <p class="text-xl text-text-muted mb-10 leading-relaxed max-w-2xl animate-fade-in-up delay-200">
-        Fullstack Engineer merging pixel-perfect UX (Tailwind CSS) with robust microservices. Specialized in DDD, Legacy Migration, and DevOps automation on GCP.
+
+      <p class="hero-in mt-6 max-w-[60ch] text-lead text-fg-muted" style="--i: 2">
+        {t.lead(PROFILE.name)}
       </p>
-      
-      <div class="flex flex-wrap gap-4 animate-fade-in-up delay-300">
-        <Button href="#projects" variant="primary" size="lg">
-          View Architecture Case Studies
+
+      <div class="hero-in mt-10 flex flex-wrap items-center gap-3" style="--i: 3">
+        <Button href={LINKEDIN_URL} external size="lg" aria-label={t.ctaPrimaryAria}>
+          {t.ctaPrimary}
+          <span aria-hidden="true">↗</span>
         </Button>
-        <ContactButton client:visible />
+        <Button href="#work" variant="secondary" size="lg">
+          {t.ctaSecondary}
+          <span aria-hidden="true" class="transition-transform group-hover/btn:translate-x-0.5">→</span>
+        </Button>
       </div>
+
+      <p class="hero-in mt-8 text-sm text-fg-subtle" style="--i: 4">{t.proof}</p>
     </div>
-  </div>
 
-  <!-- 3D visual placeholder (Overflowing) -->
-  <div class="absolute top-1/2 right-[5%] lg:right-[10%] transform -translate-y-1/2 z-0 hidden lg:block w-[600px] h-[600px]">
-     <StylizedLogo />
-  </div>
-
-  <!-- Background decorative elements -->
-  <div class="absolute top-0 right-0 -z-10 opacity-20 transform translate-x-1/2 -translate-y-1/4">
-     <div class="w-[800px] h-[800px] rounded-full bg-accent-blue blur-[120px]"></div>
+    <div class="hero-in lg:col-span-5" style="--i: 3">
+      <ProductBento />
+    </div>
   </div>
 </section>
 
 <style>
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
+  .hero-in {
+    animation: hero-in 700ms var(--ease-out-soft) both;
+    animation-delay: calc(var(--i, 0) * 80ms);
   }
 
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
     }
   }
 </style>
